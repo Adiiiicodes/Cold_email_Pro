@@ -1,0 +1,227 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
+}
+
+body {
+    background: #151515;
+    min-height: 100vh;
+    padding: clamp(10px, 2vw, 20px);
+    cursor: default;
+    overflow-x: hidden;
+}
+
+.nav {
+    background: #CBFC01;
+    padding: clamp(15px, 3vw, 20px);
+    margin-bottom: clamp(20px, 4vw, 40px);
+    border: 4px solid #151515;
+    box-shadow: 8px 8px 0px #151515;
+    position: relative;
+    transform: rotate(-1deg);
+    width: 100%;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+    gap: clamp(15px, 3vw, 30px);
+    transform: rotate(1deg);
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    color: #151515;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    transform: translateY(-5px);
+    background: #151515;
+    color: #CBFC01;
+}
+
+.hero {
+    background: #2E2E2E;
+    padding: clamp(30px, 5vw, 60px) clamp(20px, 4vw, 40px);
+    margin: clamp(30px, 5vw, 60px) clamp(10px, 2vw, 20px);
+    border: 4px solid #FFFFFF;
+    box-shadow: 12px 12px 0px #CBFC01;
+    transform: rotate(1deg);
+    overflow: hidden;
+}
+
+.hero-content {
+    transform: rotate(1deg);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    color: #CBFC01;
+    font-size: clamp(2rem, 6vw, 4rem);
+    margin-bottom: clamp(15px, 3vw, 20px);
+    line-height: 1.2;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    transform: rotate(0deg);
+    word-wrap: break-word;
+}
+
+.hero p {
+    color: #FFFFFF;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    margin-bottom: clamp(30px, 5vw, 40px);
+    transform: rotate(0deg);
+    max-width: 800px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: clamp(15px, 3vw, 30px);
+    justify-content: flex-start;
+    transform: rotate(0deg);
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: clamp(15px, 3vw, 20px) clamp(20px, 4vw, 40px);
+    text-decoration: none;
+    font-weight: 900;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    text-transform: uppercase;
+    transition: transform 0.2s;
+    border: 4px solid #151515;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.btn:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 5px 5px 0px #151515;
+}
+
+.btn-primary {
+    background: #CBFC01;
+    color: #151515;
+}
+
+.btn-secondary {
+    background: #FFFFFF;
+    color: #151515;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: clamp(20px, 4vw, 40px);
+    padding: clamp(10px, 2vw, 20px);
+    margin-top: clamp(40px, 8vw, 80px);
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feature-card {
+    background: #2E2E2E;
+    border: 4px solid #FFFFFF;
+    padding: clamp(20px, 4vw, 30px);
+    transition: transform 0.2s;
+    position: relative;
+}
+
+.feature-card:nth-child(1) { transform: rotate(-2deg); }
+.feature-card:nth-child(2) { transform: rotate(1deg); }
+.feature-card:nth-child(3) { transform: rotate(-1deg); }
+
+.feature-card:hover {
+    transform: translateY(-10px) rotate(0deg);
+    box-shadow: 8px 8px 0px #CBFC01;
+}
+
+.feature-card h3 {
+    color: #CBFC01;
+    margin-bottom: 15px;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-transform: uppercase;
+}
+
+.feature-card p {
+    color: #FFFFFF;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    line-height: 1.6;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .nav-links a {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hero {
+        margin: 30px 10px;
+        padding: 30px 20px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        padding: 10px;
+    }
+
+    .feature-card {
+        transform: none !important;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    .btn {
+        padding: 15px 25px;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 2000px) {
+    .hero-content, .features-grid {
+        max-width: 1800px;
+    }
+}
+
+/* For devices that prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .btn, .feature-card, .nav-links a {
+        transition: none;
+    }
+}

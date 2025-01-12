@@ -1,0 +1,85 @@
+/* static/css/docs.css */
+:root {
+    --primary: #0A2647;
+    --secondary: #F5EFE7;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--secondary);
+    margin: 0;
+    padding: 0;
+}
+
+.nav {
+    background: var(--primary);
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-around;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.nav-links a {
+    color: var(--secondary);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.docs-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.sidebar {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.1),
+        inset 0 1px 1px rgba(255,255,255,0.9);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin-bottom: 1rem;
+}
+
+.sidebar a {
+    color: var(--primary);
+    text-decoration: none;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.sidebar a:hover {
+    background: var(--secondary);
+}
+
+.content-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.1),
+        inset 0 1px 1px rgba(255,255,255,0.9);
+}
