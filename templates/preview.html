@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview Email - Cold Email Pro</title>
+    <style>
+        .email-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .email-content {
+            min-height: 300px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #eee;
+            border-radius: 3px;
+        }
+        
+        .button-group {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .save-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .copy-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .success-message {
+            color: #4CAF50;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <h2>Preview Your Email</h2>
+        <div contenteditable="true" class="email-content" id="emailContent">
+            <!-- Email content will be inserted here -->
+        </div>
+        <div class="button-group">
+            <button class="button save-btn" onclick="saveChanges()">Save Changes</button>
+            <button class="button copy-btn" onclick="copyEmail()">Copy Email</button>
+        </div>
+        <p id="successMessage" class="success-message">Changes saved successfully!</p>
+    </div>
+
+    <script>
+        // Get email ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const emailId = urlParams.get('id');
+
+        function saveChanges() {
+            const content = document.getElementById('emailContent').innerText;
+            
+            fetch('/modify_email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    emailId: emailId,
+                    content: content
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const successMessage = document.getElementById('successMessage');
+                    successMessage.style.display = 'block';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to save changes');
+            });
+        }
+
+        function copyEmail() {
+            const content = document.getElementById('emailContent').innerText;
+            navigator.clipboard.writeText(content)
+                .then(() => {
+                    alert('Email copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy:', err);
+                    alert('Failed to copy email');
+                });
+        }
+    </script>
+</body>
+</html>
