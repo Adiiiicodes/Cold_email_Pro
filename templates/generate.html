@@ -18,41 +18,89 @@
     </nav>
 
     <div class="question-form">
-        <form action="/generate" method="POST" enctype="multipart/form-data">
-            <div class="section" id="portfolio-section">
-                <h3>Portfolio Upload</h3>
+        <form id="emailForm" action="/generate" method="POST">
+            <div class="section" id="sender-info">
+                <h3>Sender Information</h3>
                 <div class="form-group">
-                    <label>Upload Your Portfolio (PDF)</label>
-                    <input type="file" accept=".pdf" class="form-control" name="portfolio" required>
+                    <label for="name">What is your name and job title?</label>
+                    <input type="text" id="name" class="form-control" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">What is the name of your company or organization?</label>
+                    <input type="text" id="company" class="form-control" name="company" required>
+                </div>
+                <div class="form-group">
+                    <label for="services">What services or solutions does your company specialize in?</label>
+                    <textarea id="services" class="form-control" name="services" required></textarea>
                 </div>
             </div>
 
-            <div class="section" id="personal-info">
-                <h3>Personal Information</h3>
+            <div class="section" id="recipient-info">
+                <h3>Recipient Information</h3>
                 <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" class="form-control" name="name" required>
+                    <label for="recipient">Who is the target recipient (e.g., name, job title, company)?</label>
+                    <input type="text" id="recipient" class="form-control" name="recipient" required>
                 </div>
                 <div class="form-group">
-                    <label>Current Role</label>
-                    <input type="text" class="form-control" name="role" required>
+                    <label for="goal">What is the primary goal of this email?</label>
+                    <select id="goal" class="form-control" name="goal" required>
+                        <option value="">Select a goal...</option>
+                        <option value="pitch">Pitch a service</option>
+                        <option value="meeting">Request a meeting</option>
+                        <option value="followup">Follow up on previous interaction</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="problem">What specific problem or need of the recipient are you addressing?</label>
+                    <textarea id="problem" class="form-control" name="problem" required></textarea>
                 </div>
             </div>
 
-            <div class="section" id="skills">
-                <h3>Skills & Expertise</h3>
+            <div class="section" id="content-info">
+                <h3>Email Content</h3>
                 <div class="form-group">
-                    <label>Top Technical Skills (comma-separated)</label>
-                    <input type="text" class="form-control" name="technical_skills" required>
+                    <label for="pastWork">Do you want to reference any specific past work or projects?</label>
+                    <textarea id="pastWork" class="form-control" name="pastWork"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Top Soft Skills (comma-separated)</label>
-                    <input type="text" class="form-control" name="soft_skills" required>
+                    <label for="tone">What tone would you like the email to have?</label>
+                    <select id="tone" class="form-control" name="tone" required>
+                        <option value="">Select a tone...</option>
+                        <option value="formal">Formal</option>
+                        <option value="friendly">Friendly</option>
+                        <option value="persuasive">Persuasive</option>
+                        <option value="professional">Professional</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="cta">Do you want to include any specific call-to-action?</label>
+                    <input type="text" id="cta" class="form-control" name="cta" required>
+                </div>
+                <div class="form-group">
+                    <label for="benefits">What key benefits or unique selling points should the email highlight?</label>
+                    <textarea id="benefits" class="form-control" name="benefits" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="deadline">Do you want to include a deadline or urgency in the email?</label>
+                    <input type="date" id="deadline" class="form-control" name="deadline">
+                </div>
+                <div class="form-group">
+                    <label for="signoff">What is your preferred sign-off?</label>
+                    <select id="signoff" class="form-control" name="signoff" required>
+                        <option value="">Select a sign-off...</option>
+                        <option value="best">Best regards</option>
+                        <option value="sincerely">Sincerely</option>
+                        <option value="thanks">Thanks</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                    <input type="text" id="customSignoff" class="form-control" name="customSignoff" style="display: none;" placeholder="Enter custom sign-off">
                 </div>
             </div>
 
             <button type="submit" class="btn">Generate Email</button>
         </form>
     </div>
+    <script src="static/js/main.js"></script>
 </body>
 </html>
