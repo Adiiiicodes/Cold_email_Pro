@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Email - Cold Email Pro</title>
+    <link rel="stylesheet" href="static/css/response.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/guidelines">Guidelines</a>
+            <a href="/docs">Documentation</a>
+            <a href="/features">Features</a>
+            <a href="/generate">Generate Email</a>
+        </div>
+    </nav>
+
+    <div class="response-container">
+        <!-- Email Preview Section -->
+        <div class="email-preview">
+            <div class="email-header">
+                <h2>Your Generated Email</h2>
+                <p>Based on your portfolio and the job requirements</p>
+            </div>
+            
+            <div class="email-content">
+                {{ generated_email }}
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn" onclick="copyToClipboard()">
+                    <span>📋</span> Copy to Clipboard
+                </button>
+                <button class="btn" onclick="downloadEmail()">
+                    <span>⬇️</span> Download as Text
+                </button>
+                <button class="btn" onclick="window.location.href='/generate'">
+                    <span>🔄</span> Generate New Email
+                </button>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="analysis-grid">
+            <!-- Match Score Card -->
+            <div class="analysis-card">
+                <h3>Match Analysis</h3>
+                <div class="match-score">
+                    {{ skills_match }}%
+                </div>
+                <p>Skills Match Score</p>
+                <div class="match-score">
+                    {{ experience_match }}%
+                </div>
+                <p>Experience Match Score</p>
+            </div>
+
+            <!-- Suggestions Card -->
+            <div class="analysis-card">
+                <h3>Suggestions for Improvement</h3>
+                <ul class="suggestions-list">
+                    {% for suggestion in suggestions %}
+                    <li class="suggestion-item">
+                        <span class="suggestion-icon">💡</span>
+                        {{ suggestion }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Copy Notification -->
+    <div class="copy-notification" id="copyNotification">
+        Email copied to clipboard!
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const emailText = document.querySelector('.email-content').innerText;
+            navigator.clipboard.writeText(emailText)
+                .then(() => {
+                    const notification = document.getElementById('copyNotification');
+                    notification.classList.add('show');
+                    setTimeout(() => {
+                        notification.classList.remove('show');
+                    }, 3000);
+                });
+        }
+
+        function downloadEmail() {
+            const emailText = document.querySelector('.email-content').innerText;
+            const blob = new Blob([emailText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'cold-email.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

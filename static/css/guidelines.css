@@ -1,0 +1,63 @@
+:root {
+    --primary: #0A2647;
+    --secondary: #F5EFE7;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--secondary);
+    margin: 0;
+    padding: 0;
+}
+
+.nav {
+    background: var(--primary);
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.nav-links {
+    display: flex;
+    justify-content: space-around;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.nav-links a {
+    color: var(--secondary);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.guidelines-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.step-card {
+    background: white;
+    margin-bottom: 2rem;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.1),
+        inset 0 1px 1px rgba(255,255,255,0.9);
+}
+
+.step-card h3 {
+    color: var(--primary);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.step-card ul {
+    list-style-position: inside;
+    padding-left: 1rem;
+}
+
+.step-card li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}

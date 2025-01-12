@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Email - Cold Email Pro</title>
+    <link rel="stylesheet" href="static/css/generate.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/guidelines">Guidelines</a>
+            <a href="/docs">Documentation</a>
+            <a href="/features">Features</a>
+            <a href="/generate">Generate Email</a>
+        </div>
+    </nav>
+
+    <div class="question-form">
+        <form action="/generate" method="POST" enctype="multipart/form-data">
+            <div class="section" id="portfolio-section">
+                <h3>Portfolio Upload</h3>
+                <div class="form-group">
+                    <label>Upload Your Portfolio (PDF)</label>
+                    <input type="file" accept=".pdf" class="form-control" name="portfolio" required>
+                </div>
+            </div>
+
+            <div class="section" id="personal-info">
+                <h3>Personal Information</h3>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Current Role</label>
+                    <input type="text" class="form-control" name="role" required>
+                </div>
+            </div>
+
+            <div class="section" id="skills">
+                <h3>Skills & Expertise</h3>
+                <div class="form-group">
+                    <label>Top Technical Skills (comma-separated)</label>
+                    <input type="text" class="form-control" name="technical_skills" required>
+                </div>
+                <div class="form-group">
+                    <label>Top Soft Skills (comma-separated)</label>
+                    <input type="text" class="form-control" name="soft_skills" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">Generate Email</button>
+        </form>
+    </div>
+</body>
+</html>

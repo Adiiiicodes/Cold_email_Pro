@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cold Email Pro{% endblock %}</title>
+    <style>
+        :root {
+            --primary: #0A2647;
+            --secondary: #F5EFE7;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--secondary);
+            color: var(--primary);
+        }
+
+        .nav {
+            background: var(--primary);
+            padding: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-around;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .nav-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 
+                0 1px 3px rgba(0,0,0,0.12),
+                0 1px 2px rgba(0,0,0,0.24),
+                inset 0 1px 1px rgba(255,255,255,0.9);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: var(--secondary);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.2),
+                inset 0 1px 1px rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.2),
+                inset 0 1px 1px rgba(255,255,255,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.05),
+                0 1px 1px rgba(255,255,255,0.9);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/guidelines">Guidelines</a>
+            <a href="/doc">Documentation</a>
+            <a href="/features">Features</a>
+            <a href="/generate">Generate Email</a>
+        </div>
+    </nav>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

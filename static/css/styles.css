@@ -1,0 +1,105 @@
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header, footer {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Button styles */
+.btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+.btn-secondary {
+    background-color: #555;
+}
+
+.btn-secondary:hover {
+    background-color: #444;
+}
+
+/* Hero Section */
+.hero {
+    background-color: #333;
+    color: white;
+    padding: 50px;
+    text-align: center;
+}
+
+.cta-buttons {
+    margin-top: 20px;
+}
+
+/* Features Preview */
+.features-preview {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: #fff;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card h3 {
+    margin-top: 0;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"], input[type="number"], input[type="url"], select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Progress Bar */
+.progress-bar {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+}
+
+.progress {
+    background-color: #4CAF50;
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+}
