@@ -53,25 +53,79 @@ def split_text(text, chunk_size=1000, chunk_overlap=200):
     return splitter.split_text(text)
 
 def scrape_job_posting(url):
-    """Scrape job posting from URL."""
+    """Scrape job posting from URL with improved error handling and content extraction."""
     try:
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        response = requests.get(url, headers=headers)
+        # More comprehensive headers to avoid blocking
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5'
+        }
+        
+        # Make request with timeout
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Remove script and style elements
-        for script in soup(["script", "style"]):
-            script.decompose()
+        # Remove unwanted elements
+        for element in soup(['script', 'style', 'header', 'footer', 'nav', 'meta', 'iframe']):
+            element.decompose()
             
-        # Get text and clean it
-        text = soup.get_text()
-        lines = (line.strip() for line in text.splitlines())
-        chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-        text = ' '.join(chunk for chunk in chunks if chunk)
+        # Try to find job description content
+        selectors = [
+            '[class*="job-description"]',
+            '[class*="jobDescription"]',
+            '[class*="description"]',
+            '#job-description',
+            '.job-description',
+            '.description',
+            'article',
+            'main',
+            '.content',
+            '#content'
+        ]
         
-        return text
+        content = None
+        for selector in selectors:
+            elements = soup.select(selector)
+            for element in elements:
+                if len(element.get_text(strip=True)) > 100:
+                    content = element
+                    break
+            if content:
+                break
+                
+        # Fallback to body if no specific container found
+        if not content:
+            content = soup.body if soup.body else soup
+            
+        # Extract and clean text
+        if content:
+            # Get text with preserved spacing
+            text = content.get_text(separator='\n')
+            
+            # Clean up the text
+            lines = []
+            for line in text.splitlines():
+                line = line.strip()
+                if line and not line.isspace():
+                    lines.append(line)
+                    
+            cleaned_text = '\n'.join(lines)
+            
+            # Basic validation
+            if len(cleaned_text) < 50:
+                print("Warning: Extracted content seems too short")
+                return None
+                
+            return cleaned_text
+            
+        return None
+        
+    except requests.RequestException as e:
+        print(f"Network error while scraping job posting: {str(e)}")
+        return None
     except Exception as e:
         print(f"Error scraping job posting: {str(e)}")
         return None
@@ -83,7 +137,6 @@ def index():
 @app.route('/generate', methods=['GET', 'POST'])
 def generate_email():
     if request.method == 'GET':
-        # Simply render the form (generate.html)
         return render_template('generate.html')
     
     if request.method == 'POST':
@@ -99,33 +152,37 @@ def generate_email():
             if not allowed_file(file.filename):
                 return jsonify({'success': False, 'message': 'Invalid file type'})
 
-            # Handle file upload if it's valid
+            # Generate unique ID and save file
             email_id = str(uuid.uuid4())
             filename = secure_filename(file.filename)
             temp_path = os.path.join(UPLOAD_FOLDER, f"{email_id}_{filename}")
             file.save(temp_path)
             
-            # Process the uploaded file (assuming process_pdf and split_text functions)
+            # Process portfolio
             portfolio_text = process_pdf(temp_path)
             chunks = split_text(portfolio_text)
-        
-            # Create embeddings and store in ChromaDB
+            
+            # Initialize vector store
             vectorstore = Chroma(
                 collection_name=f"portfolio_{email_id}",
                 embedding_function=embeddings,
                 persist_directory=chroma_persist_directory
             )
-        
-            # Add documents to vector store
             vectorstore.add_texts(chunks)
-        
-            # Scrape job posting
+            
+            # Scrape job posting with validation
             job_url = request.form.get('jobUrl')
+            if not job_url:
+                return jsonify({'success': False, 'message': 'Job posting URL is required'})
+                
+            print(f"Attempting to scrape URL: {job_url}")  # Debug print
             job_posting_text = scrape_job_posting(job_url)
-        
+            
             if not job_posting_text:
-                return jsonify({'success': False, 'message': 'Failed to scrape job posting'})
-        
+                return jsonify({'success': False, 'message': 'Unable to access or parse the job posting. Please check the URL and try again.'})
+                
+            print(f"Successfully scraped content length: {len(job_posting_text)}")  # Debug print
+            
             # Collect form data
             form_data = {
                 'name': request.form.get('name'),
@@ -144,20 +201,15 @@ def generate_email():
                 'portfolio_chunks': chunks,
                 'job_posting': job_posting_text
             }
-        
-            # Store form data temporarily
+            
+            # Store data and clean up
             TEMP_EMAIL_STORAGE[email_id] = form_data
-        
-            # Clean up temporary file
             os.remove(temp_path)
-        
-            return jsonify({
-                'success': True,
-                'emailId': email_id
-            })
-        
+            
+            return jsonify({'success': True, 'emailId': email_id})
+            
         except Exception as e:
-            print(f"Error: {str(e)}")
+            print(f"Error generating email: {str(e)}")  # Debug print
             return jsonify({'success': False, 'message': str(e)})
 
         
