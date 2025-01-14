@@ -11,94 +11,137 @@
         <div class="nav-links">
             <a href="/">Home</a>
             <a href="/guidelines">Guidelines</a>
-            <a href="/docs">Documentation</a>
+            <a href="/docs">Docs</a>
             <a href="/features">Features</a>
-            <a href="/generate">Generate Email</a>
+            <a href="/generate">Generate</a>
         </div>
     </nav>
 
-    <div class="question-form">
+    <div class="form-container">
+        <div class="form-header">
+            <h2>Create Your Cold Email</h2>
+            <p>Fill out the form below to generate a personalized cold email</p>
+        </div>
+
         <form id="emailForm" action="/generate" method="POST">
-            <div class="section" id="sender-info">
-                <h3>Sender Information</h3>
-                <div class="form-group">
-                    <label for="name">What is your name and job title?</label>
-                    <input type="text" id="name" class="form-control" name="name" required>
+            <div class="section">
+                <div class="section-header">
+                    <h3>👤 Sender Information</h3>
                 </div>
-                <div class="form-group">
-                    <label for="company">What is the name of your company or organization?</label>
-                    <input type="text" id="company" class="form-control" name="company" required>
-                </div>
-                <div class="form-group">
-                    <label for="services">What services or solutions does your company specialize in?</label>
-                    <textarea id="services" class="form-control" name="services" required></textarea>
-                </div>
-            </div>
-
-            <div class="section" id="recipient-info">
-                <h3>Recipient Information</h3>
-                <div class="form-group">
-                    <label for="recipient">Who is the target recipient (e.g., name, job title, company)?</label>
-                    <input type="text" id="recipient" class="form-control" name="recipient" required>
-                </div>
-                <div class="form-group">
-                    <label for="goal">What is the primary goal of this email?</label>
-                    <select id="goal" class="form-control" name="goal" required>
-                        <option value="">Select a goal...</option>
-                        <option value="pitch">Pitch a service</option>
-                        <option value="meeting">Request a meeting</option>
-                        <option value="followup">Follow up on previous interaction</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="problem">What specific problem or need of the recipient are you addressing?</label>
-                    <textarea id="problem" class="form-control" name="problem" required></textarea>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label for="name">Your Name and Title</label>
+                        <div class="input-container">
+                            <input type="text" id="name" class="form-control" name="name" required>
+                        </div>
+                        <div class="form-tip">Example: John Smith, Senior Marketing Manager</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company Name</label>
+                        <div class="input-container">
+                            <input type="text" id="company" class="form-control" name="company" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="services">Company Specialization</label>
+                        <div class="input-container">
+                            <textarea id="services" class="form-control" name="services" required></textarea>
+                        </div>
+                        <div class="form-tip">Describe your key services or solutions</div>
+                    </div>
                 </div>
             </div>
 
-            <div class="section" id="content-info">
-                <h3>Email Content</h3>
-                <div class="form-group">
-                    <label for="pastWork">Do you want to reference any specific past work or projects?</label>
-                    <textarea id="pastWork" class="form-control" name="pastWork"></textarea>
+            <div class="section">
+                <div class="section-header">
+                    <h3>🎯 Recipient Details</h3>
                 </div>
-                <div class="form-group">
-                    <label for="tone">What tone would you like the email to have?</label>
-                    <select id="tone" class="form-control" name="tone" required>
-                        <option value="">Select a tone...</option>
-                        <option value="formal">Formal</option>
-                        <option value="friendly">Friendly</option>
-                        <option value="persuasive">Persuasive</option>
-                        <option value="professional">Professional</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="cta">Do you want to include any specific call-to-action?</label>
-                    <input type="text" id="cta" class="form-control" name="cta" required>
-                </div>
-                <div class="form-group">
-                    <label for="benefits">What key benefits or unique selling points should the email highlight?</label>
-                    <textarea id="benefits" class="form-control" name="benefits" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="deadline">Do you want to include a deadline or urgency in the email?</label>
-                    <input type="date" id="deadline" class="form-control" name="deadline">
-                </div>
-                <div class="form-group">
-                    <label for="signoff">What is your preferred sign-off?</label>
-                    <select id="signoff" class="form-control" name="signoff" required>
-                        <option value="">Select a sign-off...</option>
-                        <option value="best">Best regards</option>
-                        <option value="sincerely">Sincerely</option>
-                        <option value="thanks">Thanks</option>
-                        <option value="custom">Custom</option>
-                    </select>
-                    <input type="text" id="customSignoff" class="form-control" name="customSignoff" style="display: none;" placeholder="Enter custom sign-off">
+                <div class="section-content">
+                    <div class="form-group">
+                        <label for="recipient">Target Recipient</label>
+                        <div class="input-container">
+                            <input type="text" id="recipient" class="form-control" name="recipient" required>
+                        </div>
+                        <div class="form-tip">Include name, title, and company if known</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="goal">Email Goal</label>
+                        <div class="input-container">
+                            <select id="goal" class="form-control" name="goal" required>
+                                <option value="">Select your goal...</option>
+                                <option value="pitch">Pitch a Service</option>
+                                <option value="meeting">Request a Meeting</option>
+                                <option value="followup">Follow Up</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="problem">Addressing Their Needs</label>
+                        <div class="input-container">
+                            <textarea id="problem" class="form-control" name="problem" required></textarea>
+                        </div>
+                        <div class="form-tip">What specific problem can you help them solve?</div>
+                    </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn">Generate Email</button>
+            <div class="section">
+                <div class="section-header">
+                    <h3>✉️ Email Content</h3>
+                </div>
+                <div class="section-content">
+                    <div class="form-group">
+                        <label for="pastWork">Relevant Experience</label>
+                        <div class="input-container">
+                            <textarea id="pastWork" class="form-control" name="pastWork"></textarea>
+                        </div>
+                        <div class="form-tip">Share relevant past work or success stories</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="tone">Email Tone</label>
+                        <div class="input-container">
+                            <select id="tone" class="form-control" name="tone" required>
+                                <option value="">Choose a tone...</option>
+                                <option value="formal">Formal</option>
+                                <option value="friendly">Friendly</option>
+                                <option value="persuasive">Persuasive</option>
+                                <option value="professional">Professional</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="cta">Call-to-Action</label>
+                        <div class="input-container">
+                            <input type="text" id="cta" class="form-control" name="cta" required>
+                        </div>
+                        <div class="form-tip">What action do you want them to take?</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="benefits">Key Benefits</label>
+                        <div class="input-container">
+                            <textarea id="benefits" class="form-control" name="benefits" required></textarea>
+                        </div>
+                        <div class="form-tip">List your unique selling points</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signoff">Email Sign-off</label>
+                        <div class="input-container">
+                            <select id="signoff" class="form-control" name="signoff" required>
+                                <option value="">Choose a sign-off...</option>
+                                <option value="best">Best Regards</option>
+                                <option value="sincerely">Sincerely</option>
+                                <option value="thanks">Thanks</option>
+                                <option value="custom">Custom</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-container">
+                <button type="submit" class="btn">Generate Your Email ✨</button>
+            </div>
         </form>
     </div>
     <script src="static/js/main.js"></script>
