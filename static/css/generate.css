@@ -1,86 +1,223 @@
-:root {
-    --primary: #0A2647;
-    --secondary: #F5EFE7;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background: var(--secondary);
-    margin: 0;
-    padding: 0;
+    background: #151515;
+    min-height: 100vh;
+    padding: clamp(10px, 2vw, 20px);
+    cursor: default;
+    overflow-x: hidden;
 }
 
 .nav {
-    background: var(--primary);
-    padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #CBFC01;
+    padding: clamp(15px, 3vw, 20px);
+    margin-bottom: clamp(20px, 4vw, 40px);
+    border: 4px solid #151515;
+    box-shadow: 8px 8px 0px #151515;
+    position: relative;
+    transform: rotate(-1deg);
+    width: 100%;
 }
 
 .nav-links {
     display: flex;
-    justify-content: space-around;
-    max-width: 800px;
-    margin: 0 auto;
+    justify-content: center;
+    gap: clamp(15px, 3vw, 30px);
+    transform: rotate(1deg);
+    flex-wrap: wrap;
 }
 
 .nav-links a {
-    color: var(--secondary);
+    color: #151515;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+    font-weight: 900;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
-.question-form {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 
-        0 2px 4px rgba(0,0,0,0.1),
-        inset 0 1px 1px rgba(255,255,255,0.9);
+.nav-links a:hover {
+    transform: translateY(-5px);
+    background: #151515;
+    color: #CBFC01;
+}
+
+.form-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 40px);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: clamp(30px, 5vw, 50px);
+    transform: rotate(-1deg);
+}
+
+.form-header h2 {
+    color: #CBFC01;
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
+
+.form-header p {
+    color: #FFFFFF;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-family: Arial, sans-serif;
 }
 
 .section {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: var(--secondary);
-    border-radius: 8px;
+    background: #2E2E2E;
+    border: 4px solid #FFFFFF;
+    margin-bottom: clamp(30px, 5vw, 50px);
+    position: relative;
+    transform: rotate(1deg);
+    transition: transform 0.3s;
+}
+
+.section:hover {
+    transform: rotate(0deg) translateY(-5px);
+    box-shadow: 8px 8px 0px #CBFC01;
+}
+
+.section-header {
+    background: #CBFC01;
+    padding: clamp(15px, 3vw, 25px);
+    border-bottom: 4px solid #151515;
+    transform: rotate(-1deg);
+    margin-bottom: 20px;
+}
+
+.section-header h3 {
+    color: #151515;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    text-transform: uppercase;
+}
+
+.section-content {
+    padding: clamp(20px, 4vw, 30px);
+    transform: rotate(-1deg);
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: clamp(25px, 4vw, 35px);
+    position: relative;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
-    color: var(--primary);
-    font-weight: 500;
+    color: #CBFC01;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.form-group .input-container {
+    position: relative;
 }
 
 .form-control {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 8px;
-    font-size: 1rem;
-    background: white;
-    box-shadow: 
-        inset 0 2px 4px rgba(0,0,0,0.05),
-        0 1px 1px rgba(255,255,255,0.9);
+    padding: clamp(12px, 2vw, 15px);
+    background: #151515;
+    border: 3px solid #CBFC01;
+    color: #FFFFFF;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    font-family: Arial, sans-serif;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    transform: translateX(-5px);
+    box-shadow: 5px 5px 0px #CBFC01;
+}
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23CBFC01' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 40px;
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-tip {
+    color: #FFFFFF;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    font-family: Arial, sans-serif;
+    opacity: 0.8;
+}
+
+.submit-container {
+    text-align: center;
+    margin-top: clamp(40px, 6vw, 60px);
+    transform: rotate(-1deg);
 }
 
 .btn {
-    background: var(--primary);
-    color: var(--secondary);
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 8px;
+    background: #CBFC01;
+    color: #151515;
+    border: 4px solid #151515;
+    padding: clamp(15px, 3vw, 25px) clamp(30px, 5vw, 50px);
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    font-weight: 900;
+    text-transform: uppercase;
     cursor: pointer;
-    font-size: 1rem;
-    width: 100%;
-    box-shadow: 
-        0 2px 4px rgba(0,0,0,0.2),
-        inset 0 1px 1px rgba(255,255,255,0.1);
+    transition: all 0.3s;
+    display: inline-block;
 }
+
+.btn:hover {
+    transform: translate(-5px, -5px);
+    box-shadow: 5px 5px 0px #151515;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .section, .section:hover {
+        transform: none;
+    }
+
+    .section-header {
+        transform: none;
+    }
+
+    .section-content {
+        transform: none;
+    }
+
+    .form-header {
+        transform: none;
+    }
+}
+
+/* For devices that prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .btn, .form-control, .nav-links a, .section {
+        transition: none;
+    }
+} 
