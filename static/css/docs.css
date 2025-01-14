@@ -1,60 +1,85 @@
 /* static/css/docs.css */
-:root {
-    --primary: #0A2647;
-    --secondary: #F5EFE7;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial Black', 'Helvetica Bold', sans-serif;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background: var(--secondary);
-    margin: 0;
-    padding: 0;
+    background: #151515;
+    min-height: 100vh;
+    padding: clamp(10px, 2vw, 20px);
+    cursor: default;
+    overflow-x: hidden;
 }
 
 .nav {
-    background: var(--primary);
-    padding: 1rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #CBFC01;
+    padding: clamp(15px, 3vw, 20px);
+    margin-bottom: clamp(20px, 4vw, 40px);
+    border: 4px solid #151515;
+    box-shadow: 8px 8px 0px #151515;
+    position: relative;
+    transform: rotate(-1deg);
+    width: 100%;
 }
 
 .nav-links {
     display: flex;
-    justify-content: space-around;
-    max-width: 800px;
-    margin: 0 auto;
+    justify-content: center;
+    gap: clamp(15px, 3vw, 30px);
+    transform: rotate(1deg);
+    flex-wrap: wrap;
 }
 
 .nav-links a {
-    color: var(--secondary);
+    color: #151515;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
+    font-weight: 900;
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    transform: translateY(-5px);
+    background: #151515;
+    color: #CBFC01;
 }
 
 .docs-container {
     display: grid;
     grid-template-columns: 250px 1fr;
-    gap: 2rem;
-    max-width: 1200px;
+    gap: clamp(20px, 4vw, 40px);
+    max-width: 1400px;
     margin: 2rem auto;
-    padding: 0 1rem;
+    padding: 0 clamp(10px, 2vw, 20px);
 }
 
 .sidebar {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 12px;
-    height: fit-content;
+    background: #2E2E2E;
+    padding: clamp(20px, 4vw, 30px);
+    border: 4px solid #FFFFFF;
+    box-shadow: 8px 8px 0px #CBFC01;
+    transform: rotate(-1deg);
     position: sticky;
     top: 2rem;
-    box-shadow: 
-        0 2px 4px rgba(0,0,0,0.1),
-        inset 0 1px 1px rgba(255,255,255,0.9);
+    height: fit-content;
+}
+
+.sidebar h3 {
+    color: #CBFC01;
+    margin-bottom: 20px;
+    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    text-transform: uppercase;
 }
 
 .sidebar ul {
     list-style: none;
-    padding: 0;
+    transform: rotate(1deg);
 }
 
 .sidebar li {
@@ -62,24 +87,68 @@ body {
 }
 
 .sidebar a {
-    color: var(--primary);
+    color: #FFFFFF;
     text-decoration: none;
     display: block;
     padding: 0.5rem;
-    border-radius: 6px;
-    transition: background 0.3s;
+    transition: transform 0.2s;
+    font-weight: 900;
 }
 
 .sidebar a:hover {
-    background: var(--secondary);
+    color: #CBFC01;
+    transform: translateX(10px);
 }
 
 .content-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    box-shadow: 
-        0 2px 4px rgba(0,0,0,0.1),
-        inset 0 1px 1px rgba(255,255,255,0.9);
+    background: #2E2E2E;
+    padding: clamp(30px, 5vw, 60px);
+    border: 4px solid #FFFFFF;
+    box-shadow: 12px 12px 0px #CBFC01;
+    margin-bottom: clamp(30px, 5vw, 60px);
+    transform: rotate(1deg);
+}
+
+.content-section h2 {
+    color: #CBFC01;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: clamp(15px, 3vw, 20px);
+    text-transform: uppercase;
+}
+
+.content-section p {
+    color: #FFFFFF;
+    font-size: clamp(1rem, 2vw, 1.1rem);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+    .docs-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .sidebar {
+        position: relative;
+        top: 0;
+        margin-bottom: 2rem;
+    }
+    
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .nav-links a {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* For devices that prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .sidebar a, .content-section {
+        transition: none;
+    }
 }
