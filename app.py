@@ -1,19 +1,25 @@
 from flask import Flask, request, jsonify, render_template, session
 from werkzeug.utils import secure_filename
 import os
-from pathlib import Path
-from tempfile import NamedTemporaryFile
-from langchain_text_splitters import CharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_chroma import Chroma
+import uuid
 import requests
 from bs4 import BeautifulSoup
 import PyPDF2
+from langchain_text_splitters import CharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_chroma import Chroma
+from requests.adapters import HTTPAdapter
+from urllib3.util import Retry
+import time
+from groq import Groq
+import os
+from flask import jsonify, request, render_template
+from werkzeug.utils import secure_filename
 import uuid
-import json
+from typing import Dict, Any
 
 app = Flask(__name__)
-app.secret_key = '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'  # Change this to a secure secret key
+app.secret_key = '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'  # Use a secure secret key
 
 # Configuration
 UPLOAD_FOLDER = 'temp_uploads'
@@ -52,96 +58,80 @@ def split_text(text, chunk_size=1000, chunk_overlap=200):
     )
     return splitter.split_text(text)
 
+def get_with_retry(url):
+    """Make a GET request with retries and polite delay."""
+    session = requests.Session()
+    retry = Retry(total=3, backoff_factor=1)
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+
+    headers = {
+        'User-Agent': 'Friendly Bot 1.0 (cookiebolte@gmail.com)',
+    }
+
+    response = session.get(url, headers=headers)
+    time.sleep(2)  # Polite delay between requests
+    return response
+
 def scrape_job_posting(url):
-    """Scrape job posting from URL with improved error handling and content extraction."""
+    """Scrape job posting from a URL using retry logic."""
     try:
-        # More comprehensive headers to avoid blocking
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5'
-        }
-        
-        # Make request with timeout
-        response = requests.get(url, headers=headers, timeout=10)
+        response = get_with_retry(url)
         response.raise_for_status()
-        
+
         soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Remove unwanted elements
         for element in soup(['script', 'style', 'header', 'footer', 'nav', 'meta', 'iframe']):
             element.decompose()
-            
-        # Try to find job description content
-        selectors = [
-            '[class*="job-description"]',
-            '[class*="jobDescription"]',
-            '[class*="description"]',
-            '#job-description',
-            '.job-description',
-            '.description',
-            'article',
-            'main',
-            '.content',
-            '#content'
-        ]
-        
-        content = None
-        for selector in selectors:
-            elements = soup.select(selector)
-            for element in elements:
-                if len(element.get_text(strip=True)) > 100:
-                    content = element
-                    break
-            if content:
-                break
-                
-        # Fallback to body if no specific container found
-        if not content:
-            content = soup.body if soup.body else soup
-            
-        # Extract and clean text
-        if content:
-            # Get text with preserved spacing
-            text = content.get_text(separator='\n')
-            
-            # Clean up the text
-            lines = []
-            for line in text.splitlines():
-                line = line.strip()
-                if line and not line.isspace():
-                    lines.append(line)
-                    
-            cleaned_text = '\n'.join(lines)
-            
-            # Basic validation
-            if len(cleaned_text) < 50:
-                print("Warning: Extracted content seems too short")
-                return None
-                
-            return cleaned_text
-            
-        return None
-        
-    except requests.RequestException as e:
-        print(f"Network error while scraping job posting: {str(e)}")
-        return None
+
+        content = soup.get_text(separator="\n", strip=True)
+        if len(content) < 50:
+            return None
+        return content
+
     except Exception as e:
-        print(f"Error scraping job posting: {str(e)}")
+        print(f"Error scraping job posting: {e}")
         return None
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
+def create_email_prompt(form_data: Dict[str, Any], job_posting_text: str) -> str:
+    return f"""
+    Generate a professional email using the following information:
+    
+    Sender's Name: {form_data['name']}
+    Company: {form_data['company']}
+    Services Offered: {form_data['services']}
+    Recipient: {form_data['recipient']}
+    Goal: {form_data['goal']}
+    Problem to Solve: {form_data['problem']}
+    Past Work Experience: {form_data['pastWork']}
+    Desired Tone: {form_data['tone']}
+    Call to Action: {form_data['cta']}
+    Benefits: {form_data['benefits']}
+    Deadline: {form_data['deadline']}
+    
+    Job Posting Details:
+    {job_posting_text}
+    
+    Create a persuasive email that:
+    1. Maintains a {form_data['tone']} tone
+    2. Clearly addresses the recipient's needs from the job posting
+    3. Highlights relevant experience and benefits
+    4. Includes a clear call to action
+    5. Uses the provided sign-off: {form_data['customSignoff'] if form_data['customSignoff'] else form_data['signoff']}
+    """
+
 @app.route('/generate', methods=['GET', 'POST'])
 def generate_email():
     if request.method == 'GET':
         return render_template('generate.html')
-    
+
     if request.method == 'POST':
         try:
-            # Check if 'portfolio' is part of the request
+            # File handling
             if 'portfolio' not in request.files:
                 return jsonify({'success': False, 'message': 'No file uploaded'})
 
@@ -157,32 +147,28 @@ def generate_email():
             filename = secure_filename(file.filename)
             temp_path = os.path.join(UPLOAD_FOLDER, f"{email_id}_{filename}")
             file.save(temp_path)
-            
+
             # Process portfolio
             portfolio_text = process_pdf(temp_path)
             chunks = split_text(portfolio_text)
-            
-            # Initialize vector store
+
+            # Store in vector database
             vectorstore = Chroma(
                 collection_name=f"portfolio_{email_id}",
                 embedding_function=embeddings,
                 persist_directory=chroma_persist_directory
             )
             vectorstore.add_texts(chunks)
-            
-            # Scrape job posting with validation
+
+            # Get and validate job URL
             job_url = request.form.get('jobUrl')
             if not job_url:
                 return jsonify({'success': False, 'message': 'Job posting URL is required'})
-                
-            print(f"Attempting to scrape URL: {job_url}")  # Debug print
+
             job_posting_text = scrape_job_posting(job_url)
-            
             if not job_posting_text:
-                return jsonify({'success': False, 'message': 'Unable to access or parse the job posting. Please check the URL and try again.'})
-                
-            print(f"Successfully scraped content length: {len(job_posting_text)}")  # Debug print
-            
+                return jsonify({'success': False, 'message': 'Unable to scrape job posting. Please check the URL.'})
+
             # Collect form data
             form_data = {
                 'name': request.form.get('name'),
@@ -201,76 +187,69 @@ def generate_email():
                 'portfolio_chunks': chunks,
                 'job_posting': job_posting_text
             }
+
+            # Initialize Groq client
+            groq_client = Groq(api_key=os.getenv('GROQ_API_KEY'))
             
-            # Store data and clean up
-            TEMP_EMAIL_STORAGE[email_id] = form_data
+            # Create prompt and generate email
+            prompt = create_email_prompt(form_data, job_posting_text)
+            
+            # Make API call to Groq
+            completion = groq_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "system",
+                        "content": "You are a professional email writer who crafts compelling, personalized business correspondence."
+                    },
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ],
+                model="mixtral-8x7b-32768",  # Or your preferred Groq model
+                temperature=0.7,
+                max_tokens=1000
+            )
+
+            # Extract generated email
+            email_content = completion.choices[0].message.content
+
+            # Store email data
+            TEMP_EMAIL_STORAGE[email_id] = {
+                'form_data': form_data,
+                'email_content': email_content
+            }
+
+            # Clean up
             os.remove(temp_path)
-            
+
             return jsonify({'success': True, 'emailId': email_id})
             
         except Exception as e:
-            print(f"Error generating email: {str(e)}")  # Debug print
+            print(f"Error generating email: {e}")
             return jsonify({'success': False, 'message': str(e)})
-
-        
 
 @app.route('/preview')
 def preview_email():
     email_id = request.args.get('id')
     if not email_id or email_id not in TEMP_EMAIL_STORAGE:
         return "Email not found", 404
-    
+
     email_data = TEMP_EMAIL_STORAGE[email_id]
-    return render_template('preview.html', email_data=email_data)
+    email_content = email_data.get('email_content', 'Email content is not available.')
+
+    return render_template('preview.html', email_content=email_content, email_id=email_id)
 
 @app.route('/modify_email', methods=['POST'])
 def modify_email():
     email_id = request.json.get('emailId')
     modified_content = request.json.get('content')
-    
+
     if not email_id or email_id not in TEMP_EMAIL_STORAGE:
         return jsonify({'success': False, 'message': 'Email not found'})
-    
-    TEMP_EMAIL_STORAGE[email_id]['modified_content'] = modified_content
+
+    TEMP_EMAIL_STORAGE[email_id]['email_content'] = modified_content
     return jsonify({'success': True})
-
-@app.route('/finalize_email', methods=['POST'])
-def finalize_email():
-    email_id = request.json.get('emailId')
-    
-    if not email_id or email_id not in TEMP_EMAIL_STORAGE:
-        return jsonify({'success': False, 'message': 'Email not found'})
-    
-    # Clean up ChromaDB collection
-    try:
-        vectorstore = Chroma(
-            collection_name=f"portfolio_{email_id}",
-            embedding_function=embeddings,
-            persist_directory=chroma_persist_directory
-        )
-        vectorstore.delete_collection()
-    except Exception as e:
-        print(f"Error cleaning up ChromaDB: {str(e)}")
-    
-    # Remove from temporary storage
-    email_data = TEMP_EMAIL_STORAGE.pop(email_id)
-    
-    return jsonify({
-        'success': True,
-        'final_content': email_data.get('modified_content', '')
-    })
-
-@app.route('/docs')
-def docs():
-    return render_template('docs.html')
-
-@app.route('/features')
-def features():
-    return render_template('features.html')
-
-@app.route('/guidelines')
-def guidelines():
-    return render_template('guidelines.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
