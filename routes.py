@@ -5,7 +5,7 @@ import uuid
 from config import Config
 from services import FileService, WebService
 from email_Logic import EmailGenerator
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer  # Directly use SentenceTransformer
 
 bp = Blueprint('main', __name__)
 TEMP_EMAIL_STORAGE = {}
@@ -75,8 +75,7 @@ def generate_email():
                 return jsonify({'success': False, 'message': f'Missing fields: {", ".join(missing_fields)}'})
 
             # Generate email
-            embeddings = SentenceTransformer("all-MiniLM-L6-v2")
-            email_generator = EmailGenerator(Config.GEMINI_API_KEY, embeddings)
+            email_generator = EmailGenerator(Config.GEMINI_API_KEY)  # No need for embeddings parameter
             email_generator.store_portfolio(email_id, chunks)
             email_content = email_generator.generate_email(form_data, job_posting_text)
 
@@ -94,11 +93,6 @@ def generate_email():
         except Exception as e:
             print(f"Error generating email: {e}")
             return jsonify({'success': False, 'message': str(e)})
-        
-
-@bp.route('/')
-def index():
-    return render_template('index.html')
 
 @bp.route('/docs')
 def docs():
