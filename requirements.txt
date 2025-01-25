@@ -1,0 +1,11 @@
+# requirements.txt
+flask
+sentence-transformers
+chromadb
+google-generativeai
+beautifulsoup4
+requests
+python-dotenv
+werkzeug
+fitz
+langchain
