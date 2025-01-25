@@ -1,8 +1,6 @@
 import os
 import fitz  # PyMuPDF
 from werkzeug.utils import secure_filename
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from sentence_transformers import SentenceTransformer
 from bs4 import BeautifulSoup
 import requests
 
@@ -22,19 +20,27 @@ class FileService:
 
     @staticmethod
     def split_text(text, chunk_size=1000, chunk_overlap=200):
-        """Split text into chunks using RecursiveCharacterTextSplitter."""
-        splitter = RecursiveCharacterTextSplitter(
-            chunk_size=chunk_size,
-            chunk_overlap=chunk_overlap,
-        )
-        return splitter.split_text(text)
+        """
+        Split text into chunks of a specified size with overlap.
+        This is a simple replacement for RecursiveCharacterTextSplitter.
+        """
+        words = text.split()
+        chunks = []
+        start = 0
+
+        while start < len(words):
+            end = start + chunk_size
+            chunk = " ".join(words[start:end])
+            chunks.append(chunk)
+            start += (chunk_size - chunk_overlap)
+
+        return chunks
 
 class WebService:
     @staticmethod
-    def scrape_job_posting(url, fallback_description):
+    def scrape_job_posting(url):
         """
         Scrape job posting from a URL.
-        Falls back to user-provided description if scraping fails.
         """
         try:
             response = requests.get(url, timeout=10)
@@ -47,10 +53,10 @@ class WebService:
             content = soup.get_text(separator="\n", strip=True)
             
             if len(content) <= 50:
-                return fallback_description
+                return None  # Fallback to manual description if scraping fails
                 
             return content
             
         except Exception as e:
             print(f"Error scraping job posting: {e}")
-            return fallback_description
+            return None
