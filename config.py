@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key-here')
+    SECRET_KEY = os.getenv('SECRET_KEY', '7cG4K8nV9zL2X1dW5fT0pQ3yR6H7mB8J')
     UPLOAD_FOLDER = 'temp_uploads'
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10MB max file size
     ALLOWED_EXTENSIONS = {'pdf'}
